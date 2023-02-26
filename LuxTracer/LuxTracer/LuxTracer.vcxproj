@@ -104,6 +104,7 @@
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vec3.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\PboRenderer.cpp" />
     <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\math\Utilities.h" />
     <ClInclude Include="include\math\vecx.h" />
+    <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\PboRenderer.h" />
     <ClInclude Include="include\Ray.h" />
     <ClInclude Include="include\shaderCode\screenQuad.h" />
