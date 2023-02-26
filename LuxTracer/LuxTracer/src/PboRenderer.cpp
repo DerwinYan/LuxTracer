@@ -19,16 +19,32 @@ namespace lux
 
 	void PboRenderer::SetClearColor(vec3 const& color)
 	{
-
+		clearColor = uColor4
+		{
+			static_cast<unsigned char>(color.r() * 255.999),
+			static_cast<unsigned char>(color.g() * 255.999),
+			static_cast<unsigned char>(color.b() * 255.999),
+			static_cast<unsigned char>(255)
+		};
 	}
 
 	void PboRenderer::WritePixel(int x, int y, vec3 const& color)
 	{
+		uColor4 testRed{ 0xFF0000FF };
+		int flippedY = Window::height - y;
+		pboPtr[Window::width * flippedY + x] = clearColor;
+	}
 
+	void PboRenderer::BindPBO()
+	{
+		pboPtr = static_cast<uColor4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
+		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
 	}
 
 	void PboRenderer::Render()
 	{
+		glUnmapNamedBuffer(pboID);
+
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pboID);
 		glTextureSubImage2D(texID, 0, 0, 0, Window::width, Window::height, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glBindTextureUnit(0, texID);
@@ -165,11 +181,8 @@ namespace lux
 		//Init PBO handle ID 
 		glCreateBuffers(1, &pboID);
 		glNamedBufferStorage(pboID, bytes, nullptr, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
-		unsigned* pPbo = static_cast<unsigned*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
-		LogAssert(pPbo, "Unsuccessful PBO mapping!");
-
-		//test clear color
-		std::fill(pPbo, pPbo + pixelCount, 0xFF0000FF);
+		pboPtr = static_cast<uColor4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
+		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
 		glUnmapNamedBuffer(pboID);
 	}
 

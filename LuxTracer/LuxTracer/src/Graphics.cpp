@@ -11,6 +11,10 @@ namespace lux
 
 	void GraphicSystem::Update()
 	{
+		pboRenderer.BindPBO();
+
+
+		
 
 		pboRenderer.Render();
 	}
