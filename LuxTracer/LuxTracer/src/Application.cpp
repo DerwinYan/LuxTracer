@@ -24,15 +24,16 @@ namespace lux
 		GLFWwindow* window{ Window::GetWindow() };
 		while (!glfwWindowShouldClose(window))
 		{
-			double staluxTime{ glfwGetTime() };
+			double startTime{ glfwGetTime() };
 			glfwPollEvents();
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE)) break;
 
 			GraphicSystem::Update();
 
 			glfwSwapBuffers(window);
+			glfwSetWindowTitle(window, std::to_string(1000.0 / Time::dt).c_str());
 
-			Time::dt = glfwGetTime() - staluxTime;
+			Time::dt = glfwGetTime() - startTime;
 			Time::totalElasped = glfwGetTime();
 		}
 	}

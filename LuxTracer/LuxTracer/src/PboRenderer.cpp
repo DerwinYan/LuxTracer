@@ -30,9 +30,15 @@ namespace lux
 
 	void PboRenderer::WritePixel(int x, int y, vec3 const& color)
 	{
-		uColor4 testRed{ 0xFF0000FF };
+		uColor4 finalColor
+		{
+			static_cast<unsigned char>(color.r() * 255.999),
+			static_cast<unsigned char>(color.g() * 255.999),
+			static_cast<unsigned char>(color.b() * 255.999),
+			static_cast<unsigned char>(255)
+		};
 		int flippedY = Window::height - y;
-		pboPtr[Window::width * flippedY + x] = clearColor;
+		pboPtr[Window::width * flippedY + x] = finalColor;
 	}
 
 	void PboRenderer::BindPBO()

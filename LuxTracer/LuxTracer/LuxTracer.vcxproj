@@ -105,6 +105,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vec3.cpp" />
     <ClCompile Include="src\PboRenderer.cpp" />
+    <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -118,10 +119,13 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Graphics.h" />
     <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\math\Utilities.h" />
     <ClInclude Include="include\math\vecx.h" />
     <ClInclude Include="include\PboRenderer.h" />
+    <ClInclude Include="include\Ray.h" />
     <ClInclude Include="include\shaderCode\screenQuad.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\math\vec3.h" />
