@@ -7,6 +7,7 @@
 #include <array>
 #include <Window.h>
 
+
 namespace lux
 {
 	void PboRenderer::Init(int width, int height)
@@ -17,24 +18,24 @@ namespace lux
 		CreateTexture();
 	}
 
-	void PboRenderer::SetClearColor(vec3 const& color)
+	void PboRenderer::SetClearColor(glm::vec3 const& color)
 	{
 		clearColor = uColor4
 		{
-			static_cast<unsigned char>(color.r() * 255.999),
-			static_cast<unsigned char>(color.g() * 255.999),
-			static_cast<unsigned char>(color.b() * 255.999),
+			static_cast<unsigned char>(color.r * 255.999),
+			static_cast<unsigned char>(color.g * 255.999),
+			static_cast<unsigned char>(color.b * 255.999),
 			static_cast<unsigned char>(255)
 		};
 	}
 
-	void PboRenderer::WritePixel(int x, int y, vec3 const& color)
+	void PboRenderer::WritePixel(int x, int y, glm::vec3 const& color)
 	{
 		uColor4 finalColor
 		{
-			static_cast<unsigned char>(color.r() * 255.999),
-			static_cast<unsigned char>(color.g() * 255.999),
-			static_cast<unsigned char>(color.b() * 255.999),
+			static_cast<unsigned char>(color.r * 255.999),
+			static_cast<unsigned char>(color.g * 255.999),
+			static_cast<unsigned char>(color.b * 255.999),
 			static_cast<unsigned char>(255)
 		};
 		int flippedY = Window::height - y;

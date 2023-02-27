@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include <math/vecx.h>
+#include <string>
+#include <glm/glm.hpp>
 
 namespace lux
 {
@@ -11,8 +12,9 @@ namespace lux
 
 		struct VertexData
 		{
-			vec3 pos{};
-			vec3 normal{};
+			glm::vec3 pos{};
+			glm::vec3 normal{};
+			glm::vec2 uv{};
 		};
 
 		struct Triangle

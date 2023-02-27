@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math/vecx.h>
+#include <glm/glm.hpp>
 
 namespace lux
 {
@@ -8,15 +8,15 @@ namespace lux
 	{
 	public:
 		Ray() = default;
-		Ray(vec3 const& origin, vec3 const& direction);
+		Ray(glm::vec3 const& origin, glm::vec3 const& direction);
 
-		vec3 const GetOrigin() const;
-		vec3 const GetDirection() const;
+		glm::vec3 const GetOrigin() const;
+		glm::vec3 const GetDirection() const;
 
-		vec3 const At(double t) const;
+		glm::vec3 const At(float t) const;
 
 	public:
-		vec3 origin{};
-		vec3 direction{};
+		glm::vec3 origin{};
+		glm::vec3 direction{};
 	};
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include <math/vecx.h>
+#include <glm/glm.hpp>
 
 namespace lux
 {
@@ -7,8 +7,8 @@ namespace lux
 	{
 	public:
 		void Init(int width, int height);
-		void SetClearColor(vec3 const& color);
-		void WritePixel(int x, int y, vec3 const& color);
+		void SetClearColor(glm::vec3 const& color);
+		void WritePixel(int x, int y, glm::vec3 const& color);
 		void BindPBO();
 		void Render();
 		void Free();

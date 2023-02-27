@@ -1,6 +1,7 @@
 
 #include <Graphics.h>
 #include <Window.h>
+#include <glm/glm.hpp>
 
 namespace lux
 {
@@ -18,7 +19,7 @@ namespace lux
 		{
 			for (int x{}; x < Window::width; ++x)
 			{
-				pboRenderer.WritePixel(x, y, vec3{ 1.0,0.0,0.0 });
+				pboRenderer.WritePixel(x, y, glm::vec3{ 1.0,0.0,0.0 });
 			}
 		}
 		
