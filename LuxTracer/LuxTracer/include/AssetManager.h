@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Mesh.h>
 #include <unordered_map>
 #include <string>
 
@@ -11,7 +10,7 @@ namespace lux
 	{
 		static void Load(std::string const& name, T const& asset)
 		{
-			asdatabaseset.emplace(std::make_pair(name, asset);
+			database.emplace(std::make_pair(name, asset));
 		}
 
 		static T* Get(std::string const& name)

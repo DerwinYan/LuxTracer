@@ -7,6 +7,7 @@ namespace lux
 	class Camera
 	{
 	public:
+		Camera() = default;
 		Camera(glm::vec3 const& eye, glm::vec3 const& target, glm::vec3 const& up, double fov, double aspectRatio)
 		{
 			float theta = glm::radians(fov);
@@ -30,7 +31,6 @@ namespace lux
 			return Ray(origin, botLeftVP + u * horzVec + v * vertVec - origin);
 		}
 
-	private:
 		glm::vec3 origin{};
 		glm::vec3 horzVec{};
 		glm::vec3 vertVec{};

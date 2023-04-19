@@ -21,6 +21,7 @@ namespace lux
 		{
 			VertexData vertices[3]{};
 		};
+
 	private:
 		std::vector<Triangle> triangles{};
 	};
