@@ -1,28 +1,27 @@
 #pragma once
+
 #include <vector>
 #include <string>
-#include <glm/glm.hpp>
+#include <Math/dvec3.h>
 
 namespace lux
 {
-	class Mesh
+	struct Mesh
 	{
-	public:
 		Mesh(std::string_view const& filePath);
 
-		struct VertexData
+		struct Vertex
 		{
-			glm::vec3 pos{};
-			glm::vec3 normal{};
-			glm::vec2 uv{};
+			math::dvec3 pos{};
+			math::dvec3 normal{};
+			//math::dvec2 uv{};
 		};
 
 		struct Triangle
 		{
-			VertexData vertices[3]{};
+			Vertex vertices[3]{};
 		};
 
-	private:
-		std::vector<Triangle> triangles{};
+		std::vector<Triangle> triangles{}; //local space triangle for pathtracing
 	};
 }

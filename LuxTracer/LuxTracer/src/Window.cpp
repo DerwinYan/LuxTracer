@@ -5,9 +5,9 @@ namespace lux
 {
 	int Window::width{};
 	int Window::height{};
-	GLFWwindow* Window::window{};
+	GLFWwindow* Window::windowptr{};
 
-	void lux::Window::CreateWindow(int _width, int _height, const char* windowName)
+	void Window::CreateWindow(int const _width, int const _height, char const* name)
 	{
 		width = _width;
 		height = _height;
@@ -18,23 +18,29 @@ namespace lux
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		window = glfwCreateWindow(width, height, "Geometry Toolbox", nullptr, nullptr);
-		if (!window) { glfwTerminate(); lux::LogError("Failed to create GLFW window!"); }
+		windowptr = glfwCreateWindow(width, height, name, nullptr, nullptr);
+		if (!windowptr) { glfwTerminate(); lux::LogError("Failed to create GLFW window!"); }
 
-		glfwMakeContextCurrent(window);
+		glfwMakeContextCurrent(windowptr);
 
 		// Init glew
 		glewExperimental = GL_TRUE;
 		if (glewInit() != GLEW_OK) { glfwTerminate(); lux::LogError("Failed to init GLEW!"); }
 	}
 
+	bool Window::IsOpen()
+	{
+		glfwPollEvents();
+		return !glfwWindowShouldClose(windowptr);
+	}
+
+	void Window::SwapBuffer()
+	{
+		glfwSwapBuffers(windowptr);
+	}
+
 	void Window::TerminateWindow()
 	{
 		glfwTerminate();
-	}
-
-	GLFWwindow* Window::GetWindow()
-	{
-		return window;
 	}
 }

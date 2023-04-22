@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -102,12 +102,11 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Math\dvec3.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\PboRenderer.cpp" />
-    <ClCompile Include="src\Ray.cpp" />
+    <ClCompile Include="src\Pbo.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -123,13 +122,16 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\AssetManager.h" />
     <ClInclude Include="include\Camera.h" />
-    <ClInclude Include="include\Graphics.h" />
+    <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Logger.h" />
+    <ClInclude Include="include\Math\dvec3.h" />
     <ClInclude Include="include\Mesh.h" />
-    <ClInclude Include="include\PboRenderer.h" />
-    <ClInclude Include="include\Ray.h" />
-    <ClInclude Include="include\shaderCode\screenQuad.h" />
-    <ClInclude Include="include\Timer.h" />
+    <ClInclude Include="include\pbo.h" />
+    <ClInclude Include="include\ShaderCode\ScreenQuad.h" />
+    <ClInclude Include="include\Systems\CommonSystems.h" />
+    <ClInclude Include="include\Systems\GraphicsSystem.h" />
+    <ClInclude Include="include\Systems\SceneManagerSystem.h" />
+    <ClInclude Include="include\Systems\System.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

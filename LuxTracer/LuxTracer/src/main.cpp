@@ -1,7 +1,6 @@
-
-#include <Application.h>
 #include <cassert>
 #include <memory>
+#include <Application.h>
 
 int main()
 {
@@ -9,9 +8,7 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-
 	lux::Application::Init();
-	lux::Application::Run();
+	lux::Application::Update();
 	lux::Application::UnInit();
-
 }

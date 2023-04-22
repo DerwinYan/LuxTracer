@@ -7,14 +7,13 @@ namespace lux
 {
 	struct Window
 	{
-	public:
-		static void CreateWindow(int width, int height, const char* windowName);
+		static void CreateWindow(int const width, int const height, char const* name);
+		static bool IsOpen();
+		static void SwapBuffer();
 		static void TerminateWindow();
-		static GLFWwindow* GetWindow();
 
-	public:
 		static int width;
 		static int height;
-		static GLFWwindow* window;
+		static GLFWwindow* windowptr;
 	};
 }

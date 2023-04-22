@@ -31,8 +31,7 @@ namespace lux::screenShdr
 
 			void main()
 			{
-				fFragColor = texture(uTexture2D, vUV);
-				//fFragColor = vec4(0.2, 0.3, 0.3, 1.0);
+				fFragColor = vec4(texture(uTexture2D, vUV).rgb, 1.0);
 			}
 		)"
 	};

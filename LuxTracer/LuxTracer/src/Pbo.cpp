@@ -1,77 +1,76 @@
-
-#include <PboRenderer.h>
-#include <shaderCode/screenQuad.h>
-#include <Logger.h>
-#include <string>
+#include <pbo.h>
 #include <GL/glew.h>
+#include <Logger.h>
+#include <ShaderCode/ScreenQuad.h>
 #include <array>
-#include <Window.h>
-
 
 namespace lux
 {
-	void PboRenderer::Init(int width, int height)
+	void Pbo::Init(int const _imgWidth, int const _imgHeight)
 	{
+		imgWidth = _imgWidth;
+		imgHeight = _imgHeight;
+		imgSize = imgWidth * imgHeight;
+
 		CreateShaderPgm();
 		CreatePBO();
 		CreateScreenQuad();
 		CreateTexture();
 	}
 
-	void PboRenderer::SetClearColor(glm::vec3 const& color)
+	void Pbo::WritePixel(int x, int y, math::dvec3 const& color)
 	{
-		clearColor = uColor4
+		Color4 finalColor
 		{
 			static_cast<unsigned char>(color.r * 255.999),
 			static_cast<unsigned char>(color.g * 255.999),
 			static_cast<unsigned char>(color.b * 255.999),
 			static_cast<unsigned char>(255)
 		};
+		int flippedY = imgHeight - y;
+		pboPtr[imgWidth * flippedY + x] = finalColor;
 	}
 
-	void PboRenderer::WritePixel(int x, int y, glm::vec3 const& color)
+	void Pbo::Bind()
 	{
-		uColor4 finalColor
-		{
-			static_cast<unsigned char>(color.r * 255.999),
-			static_cast<unsigned char>(color.g * 255.999),
-			static_cast<unsigned char>(color.b * 255.999),
-			static_cast<unsigned char>(255)
-		};
-		int flippedY = Window::height - y;
-		pboPtr[Window::width * flippedY + x] = finalColor;
-	}
-
-	void PboRenderer::BindPBO()
-	{
-		pboPtr = static_cast<uColor4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
+		pboPtr = static_cast<Color4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
 		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
 	}
 
-	void PboRenderer::Render()
+	void Pbo::Render()
 	{
 		glUnmapNamedBuffer(pboID);
+		pboPtr = nullptr;
 
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pboID);
-		glTextureSubImage2D(texID, 0, 0, 0, Window::width, Window::height, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTextureSubImage2D(texID, 0, 0, 0, imgWidth, imgHeight, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 		glBindTextureUnit(0, texID);
 
 		glUseProgram(shaderPgm);
 		glBindVertexArray(vao);
 		int uniformLocation = glGetUniformLocation(shaderPgm, "uTexture2D");
 		glUniform1i(uniformLocation, 0);
-		//shaderPgm.SetUniform("uTexture2D", 0);
 		glDrawElements(GL_TRIANGLE_STRIP, numIndices, GL_UNSIGNED_SHORT, NULL);
 		glBindVertexArray(0);
 	}
 
-	void PboRenderer::Free()
+	void Pbo::Clear(Color4 const clearColor)
 	{
-
+		LogAssert(pboPtr, "Invalid PBO! Make sure to bind first!");
+		std::memset(pboPtr, clearColor.raw, imgSize * 4);
 	}
 
+	void Pbo::Resize(int const newWidth, int const newHeight)
+	{
+		imgWidth = newWidth;
+		imgHeight = newHeight;
+		imgSize = imgWidth * imgHeight;
 
-	void PboRenderer::CreateShaderPgm()
+		CreatePBO();
+		CreateTexture();
+	}
+
+	void Pbo::CreateShaderPgm()
 	{
 		int compileResult;
 		shaderPgm = glCreateProgram();
@@ -128,7 +127,7 @@ namespace lux
 		int linkStatus;
 		glLinkProgram(shaderPgm);
 		glGetProgramiv(shaderPgm, GL_LINK_STATUS, &linkStatus);
-		if (GL_FALSE == linkStatus) 
+		if (GL_FALSE == linkStatus)
 		{
 			std::string logMsg = "Failed to link shader program\n";
 			GLint log_len;
@@ -144,7 +143,7 @@ namespace lux
 		}
 	}
 
-	void PboRenderer::CreateScreenQuad()
+	void Pbo::CreateScreenQuad()
 	{
 		std::array<float, 16> vertData
 		{
@@ -179,27 +178,23 @@ namespace lux
 		numIndices = static_cast<GLuint>(indices.size());
 	}
 
-	void PboRenderer::CreatePBO()
+	void Pbo::CreatePBO()
 	{
 		//Calculate num pixels
-		int pixelCount = Window::width * Window::height;
-		int bytes = pixelCount * sizeof(unsigned);
+		int bytes = imgSize * sizeof(unsigned);
 
 		//Init PBO handle ID 
 		glCreateBuffers(1, &pboID);
 		glNamedBufferStorage(pboID, bytes, nullptr, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
-		pboPtr = static_cast<uColor4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
+		pboPtr = static_cast<Color4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
 		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
 		glUnmapNamedBuffer(pboID);
 	}
 
-	void PboRenderer::CreateTexture()
+	void Pbo::CreateTexture()
 	{
 		//Create screen size texture
 		glCreateTextures(GL_TEXTURE_2D, 1, &texID);
-		glTextureStorage2D(texID, 1, GL_RGBA8, Window::width, Window::height);
+		glTextureStorage2D(texID, 1, GL_RGBA8, imgWidth, imgHeight);
 	}
-
-
-
 }
