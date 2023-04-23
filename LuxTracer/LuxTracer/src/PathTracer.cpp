@@ -1,4 +1,5 @@
 #include <PathTracer.h>
+#include <Math/mathUtils.h>
 
 namespace lux
 {
@@ -8,44 +9,73 @@ namespace lux
 
 		for (int i{}; i < spp; ++i)
 		{
-			finalColor += TraceRay(ray, scene);
+			finalColor += TraceRay(ray, scene, 0.0, math::inf);
 		}
 
 		return finalColor * weightedSPP;
 	}
-	math::dvec3 PathTracer::TraceRay(Ray const& ray, std::vector<GameObject> const& scene)
+	math::dvec3 PathTracer::TraceRay(
+		Ray const& ray, std::vector<GameObject> const& scene, 
+		double tMin, double tMax
+	)
 	{
+		bool anyHit = false;
+		HitRecord finalHitInfo{};
+		HitRecord hitinfo{};
+		double closestT = tMax;
+
 		for (const auto& go : scene)
 		{
-			double t = IntersectionSphere(ray, go);
-			if (t > 0.0)
+			if (IntersectionSphere(ray, go, tMin, tMax, hitinfo))
 			{
-				//Draw normals
-				math::dvec3 normal = math::Normalize(ray.At(t) - math::dvec3(0.0, 0.0, -1.0));
-				return 0.5 * math::dvec3(normal.x + 1.0, normal.y + 1.0, normal.z + 1.0);
+				anyHit = true;
+				closestT = hitinfo.t;
+				finalHitInfo = hitinfo;
 			}
-			else return Miss(ray);
 		}
+
+		if (anyHit)
+			return ClosestHit(finalHitInfo);
+		else
+			return Miss(ray);
 	}
 
-	double PathTracer::IntersectionSphere(Ray const& ray, GameObject const& go)
+	bool PathTracer::IntersectionSphere(
+		Ray const& ray, GameObject const& go, 
+		double tMin, double tMax, HitRecord& hitinfo
+	)
 	{
 		math::dvec3 vec = ray.position - go.position;
-		double a = math::Dot(ray.direction, ray.direction);
-		double b = 2.0 * math::Dot(vec, ray.direction);
-		double c = math::Dot(vec, vec) - go.radius * go.radius;
-		double disc = b * b - 4 * a * c;
-		if (disc < 0.0)
-			return -1.0;
-		else
+		double a = math::LengthSq(ray.direction);
+		double b = math::Dot(vec, ray.direction);
+		double c = math::LengthSq(vec) - go.radius * go.radius;
+		double disc = b*b - a*c;
+
+		if (disc < 0.0) 
+			return false;
+
+		double rootdisc = sqrt(disc);
+		double root = (-b - rootdisc) / a;
+
+		//Check both pos and neg root within t interval
+		if (root < tMin || root > tMax)
 		{
-			return (-b - sqrt(disc)) / (2.0 * a);
+			root = (-b + rootdisc) / a;
+			if (root < tMin || root > tMax)
+				return false;
 		}
+
+		//Ray is within interval, calculate hitinfo
+		hitinfo.t = root;
+		hitinfo.point = ray.At(root);
+		hitinfo.normal = (hitinfo.point - go.position) / go.radius;
+		return true;
 	}
 
-	math::dvec3 PathTracer::ClosestHit()
+	math::dvec3 PathTracer::ClosestHit(HitRecord const& hitInfo)
 	{
-		return math::dvec3();
+		//Draw normals
+		return 0.5 * (hitInfo.normal + math::dvec3(1.0, 1.0, 1.0));
 	}
 
 	math::dvec3 PathTracer::Miss(Ray const& ray)

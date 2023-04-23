@@ -8,6 +8,13 @@ namespace lux
 {
 	struct PathTracer
 	{
+		struct HitRecord
+		{
+			math::dvec3 point{};
+			math::dvec3 normal{};
+			double t{};
+		};
+
 		PathTracer(int samplesPerPixel = 1) : spp{ samplesPerPixel }, weightedSPP{ 1.0 / spp } {}
 
 		/*
@@ -18,9 +25,9 @@ namespace lux
 		*/
 
 		math::dvec3 GenerateRay(Ray const& ray, std::vector<GameObject> const& scene);
-		math::dvec3 TraceRay(Ray const& ray, std::vector<GameObject> const& scene);
-		double IntersectionSphere(Ray const& ray, GameObject const& sphere);
-		math::dvec3 ClosestHit();
+		math::dvec3 TraceRay(Ray const& ray, std::vector<GameObject> const& scene, double tMin, double tMax);
+		bool IntersectionSphere(Ray const& ray, GameObject const& sphere, double tMin, double tMax, HitRecord &hitinfo);
+		math::dvec3 ClosestHit(HitRecord const& hitInfo);
 		math::dvec3 Miss(Ray const& ray);
 
 		int spp{ 1 };

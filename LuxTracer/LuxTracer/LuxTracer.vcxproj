@@ -127,6 +127,7 @@
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\Math\dvec3.h" />
+    <ClInclude Include="include\Math\mathUtils.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\PathTracer.h" />
     <ClInclude Include="include\pbo.h" />

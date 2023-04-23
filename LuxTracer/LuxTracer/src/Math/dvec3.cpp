@@ -50,7 +50,7 @@ namespace lux::math
 
 	dvec3 const dvec3::operator/(double const val) const
 	{
-		LogAssert(x || y || x, "Attempted division by 0!");
+		LogAssert(val, "Attempted division by 0!");
 		return dvec3(x / val, y / val, z / val);
 	}
 

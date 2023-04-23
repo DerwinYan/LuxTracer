@@ -44,7 +44,7 @@ namespace lux
 				double y = (double)j / (pbo.imgHeight - 1);
 				Ray camRay(camPos, lowerLeftCorner + x * horizontal + y * vertical - camPos);
 
-				pbo.WritePixel(i, j, pt.TraceRay(camRay, BaseSystem::scene));
+				pbo.WritePixel(i, j, pt.GenerateRay(camRay, BaseSystem::scene));
 			}
 		}
 
