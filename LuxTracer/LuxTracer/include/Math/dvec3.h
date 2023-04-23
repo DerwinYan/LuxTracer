@@ -57,4 +57,5 @@ namespace lux::math
 	double DistanceSq(dvec3 const& lhs, dvec3 const& rhs);
 	dvec3 const Normalize(dvec3 const& lhs);
 	dvec3 const Cross(dvec3 const& lhs, dvec3 const& rhs);
+	dvec3 const Lerp(dvec3 const& start, dvec3 const& end, double const t);
 }

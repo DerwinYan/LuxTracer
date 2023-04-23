@@ -106,7 +106,9 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Math\dvec3.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\PathTracer.cpp" />
     <ClCompile Include="src\Pbo.cpp" />
+    <ClCompile Include="src\Ray.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,12 +128,18 @@
     <ClInclude Include="include\Logger.h" />
     <ClInclude Include="include\Math\dvec3.h" />
     <ClInclude Include="include\Mesh.h" />
+    <ClInclude Include="include\PathTracer.h" />
     <ClInclude Include="include\pbo.h" />
+    <ClInclude Include="include\Ray.h" />
+    <ClInclude Include="include\RayIntersection.h" />
+    <ClInclude Include="include\Scenes\Scene1.h" />
     <ClInclude Include="include\ShaderCode\ScreenQuad.h" />
     <ClInclude Include="include\Systems\CommonSystems.h" />
+    <ClInclude Include="include\Systems\EditorSystem.h" />
     <ClInclude Include="include\Systems\GraphicsSystem.h" />
     <ClInclude Include="include\Systems\SceneManagerSystem.h" />
     <ClInclude Include="include\Systems\System.h" />
+    <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

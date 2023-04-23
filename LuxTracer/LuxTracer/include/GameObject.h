@@ -7,11 +7,12 @@ namespace lux
 {
 	struct GameObject
 	{
-		math::dvec3 transform;
-		math::dvec3 rotation;
-		math::dvec3 scale{ 1.0 };
+		math::dvec3 position;
+		//math::dvec3 rotation;
+		//math::dvec3 scale{ 1.0 };
 
-		Mesh* mesh;
+		double radius;
+		//Mesh* mesh;
 		//Material* material
 	};
 }

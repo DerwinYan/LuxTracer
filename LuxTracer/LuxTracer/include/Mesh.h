@@ -8,12 +8,13 @@ namespace lux
 {
 	struct Mesh
 	{
+		Mesh() = default;
 		Mesh(std::string_view const& filePath);
 
 		struct Vertex
 		{
 			math::dvec3 pos{};
-			math::dvec3 normal{};
+			//math::dvec3 normal{};
 			//math::dvec2 uv{};
 		};
 

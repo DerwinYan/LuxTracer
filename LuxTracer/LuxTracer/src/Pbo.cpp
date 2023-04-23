@@ -27,8 +27,10 @@ namespace lux
 			static_cast<unsigned char>(color.b * 255.999),
 			static_cast<unsigned char>(255)
 		};
-		int flippedY = imgHeight - y;
-		pboPtr[imgWidth * flippedY + x] = finalColor;
+		//int flippedY = imgHeight - y;
+		LogAssert(pboPtr, "PBO ptr bad!");
+		pboPtr[imgWidth * y + x] = finalColor;
+		//pboPtr[imgWidth * flippedY + x] = finalColor;
 	}
 
 	void Pbo::Bind()
@@ -52,7 +54,9 @@ namespace lux
 		glUniform1i(uniformLocation, 0);
 		glDrawElements(GL_TRIANGLE_STRIP, numIndices, GL_UNSIGNED_SHORT, NULL);
 		glBindVertexArray(0);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 	}
+
 
 	void Pbo::Clear(Color4 const clearColor)
 	{

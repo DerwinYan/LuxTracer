@@ -22,6 +22,7 @@ namespace lux
 		if (!windowptr) { glfwTerminate(); lux::LogError("Failed to create GLFW window!"); }
 
 		glfwMakeContextCurrent(windowptr);
+		glfwSwapInterval(0);
 
 		// Init glew
 		glewExperimental = GL_TRUE;
