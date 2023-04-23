@@ -3,17 +3,26 @@
 
 namespace lux
 {
-	math::dvec3 PathTracer::GenerateRay(Ray const& ray, std::vector<GameObject> const& scene)
+	//math::dvec3 PathTracer::GenerateRay(Ray const& ray, std::vector<GameObject> const& scene)
+	//{
+	//	
+	//}
+
+	math::dvec3 PathTracer::GenerateRay(int x, int y, int imgWidth, int imgHeight, Camera const& cam, std::vector<GameObject> const& scene)
 	{
 		math::dvec3 finalColor{};
 
 		for (int i{}; i < spp; ++i)
 		{
+			double u = (x + math::random_double()) / (imgWidth - 1);
+			double v = (y + math::random_double()) / (imgHeight - 1);
+			Ray ray = cam.GetRay(u, v);
 			finalColor += TraceRay(ray, scene, 0.0, math::inf);
 		}
 
 		return finalColor * weightedSPP;
 	}
+
 	math::dvec3 PathTracer::TraceRay(
 		Ray const& ray, std::vector<GameObject> const& scene, 
 		double tMin, double tMax

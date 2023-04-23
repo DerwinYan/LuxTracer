@@ -3,16 +3,19 @@
 #include <Ray.h>
 #include <Mesh.h>
 #include <PathTracer.h>
+#include <Camera.h>
 
 namespace lux
 {
 	//Mesh cube;
 	static PathTracer pt;
+	static Camera cam;
 	
 	template<typename BaseSystem>
 	void GraphicsSystem<BaseSystem>::Init()
 	{
 		pbo.Init(Window::width, Window::height);
+		pt.SetSamples(4);
 
 		//cube = Mesh("../assets/models/cube.fbx");
 	}
@@ -20,31 +23,23 @@ namespace lux
 	template<typename BaseSystem>
 	void GraphicsSystem<BaseSystem>::Update()
 	{
+		srand(0);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		pbo.Bind();
-
-		//Camera
-		double aspectRatio = (double)pbo.imgWidth / (double)pbo.imgHeight;
-		double viewportHeight = 2.0;
-		double viewportWidth = aspectRatio * viewportHeight;
-		double focalLength = 1.0;
-		math::dvec3 camPos{0.0, 0.0, 0.0};
-		math::dvec3 horizontal(viewportWidth, 0.0, 0.0);
-		math::dvec3 vertical(0.0, viewportHeight, 0.0);
-		math::dvec3 lowerLeftCorner = camPos - horizontal * 0.5 - vertical * 0.5 - math::dvec3(0.0, 0.0, focalLength);
 
 		for (int j{}; j < pbo.imgHeight; ++j)
 		{
 			for (int i{}; i < pbo.imgWidth; ++i)
 			{
 				//Calculate camera ray
-				double x = (double)i / (pbo.imgWidth - 1);
-				double y = (double)j / (pbo.imgHeight - 1);
-				Ray camRay(camPos, lowerLeftCorner + x * horizontal + y * vertical - camPos);
+				//double x = (double)i / (pbo.imgWidth - 1);
+				//double y = (double)j / (pbo.imgHeight - 1);
 
-				pbo.WritePixel(i, j, pt.GenerateRay(camRay, BaseSystem::scene));
+				pbo.WritePixel(i, j, pt.GenerateRay(i, j, pbo.imgWidth, pbo.imgHeight, cam, BaseSystem::scene));
+				//pbo.WritePixel(i, j, pt.GenerateRay(cam.GetRay(x,y), BaseSystem::scene));
 			}
 		}
 

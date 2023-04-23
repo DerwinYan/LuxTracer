@@ -3,6 +3,7 @@
 #include <Math/dvec3.h>
 #include <Ray.h>
 #include <GameObject.h>
+#include <Camera.h>
 
 namespace lux
 {
@@ -16,6 +17,11 @@ namespace lux
 		};
 
 		PathTracer(int samplesPerPixel = 1) : spp{ samplesPerPixel }, weightedSPP{ 1.0 / spp } {}
+		void SetSamples(int sample)
+		{
+			spp = sample;
+			weightedSPP = 1.0 / spp;
+		}
 
 		/*
 			TraceRay will generate X rays
@@ -24,7 +30,8 @@ namespace lux
 			On miss, if there was a hit shade according to material, else shade skybox
 		*/
 
-		math::dvec3 GenerateRay(Ray const& ray, std::vector<GameObject> const& scene);
+		//math::dvec3 GenerateRay(Ray const& ray, std::vector<GameObject> const& scene);
+		math::dvec3 GenerateRay(int x, int y, int imgWidth, int imgHeight, Camera const& cam, std::vector<GameObject> const& scene);
 		math::dvec3 TraceRay(Ray const& ray, std::vector<GameObject> const& scene, double tMin, double tMax);
 		bool IntersectionSphere(Ray const& ray, GameObject const& sphere, double tMin, double tMax, HitRecord &hitinfo);
 		math::dvec3 ClosestHit(HitRecord const& hitInfo);
