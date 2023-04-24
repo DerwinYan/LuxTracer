@@ -35,7 +35,7 @@ namespace lux
 
 		for (const auto& go : scene)
 		{
-			if (IntersectionSphere(ray, go, tMin, tMax, hitinfo))
+			if (IntersectionSphere(ray, go, tMin, closestT, hitinfo))
 			{
 				anyHit = true;
 				closestT = hitinfo.t;

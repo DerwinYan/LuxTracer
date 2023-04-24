@@ -29,7 +29,7 @@ namespace lux::math
 
 	dvec3 const dvec3::operator/(dvec3 const& rhs) const
 	{
-		LogAssert(x || y || x, "Attempted division by 0!");
+		LogAssert(rhs.x || rhs.y || rhs.x, "Attempted division by 0!");
 		return dvec3(x / rhs.x, y / rhs.y, z / rhs.z);
 	}
 
@@ -80,7 +80,7 @@ namespace lux::math
 
 	dvec3& dvec3::operator/=(dvec3 const& rhs)
 	{
-		LogAssert(x || y || x, "Attempted division by 0!");
+		LogAssert(rhs.x || rhs.y || rhs.x, "Attempted division by 0!");
 		x /= rhs.x;
 		y /= rhs.y;
 		z /= rhs.z;
