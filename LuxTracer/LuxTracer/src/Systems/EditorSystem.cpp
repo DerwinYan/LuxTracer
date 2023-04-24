@@ -3,6 +3,10 @@
 
 namespace lux
 {
+	double maxFps{};
+	double avgFps{};
+	int frameCounter{1};
+
 	template<typename BaseSystem>
 	inline void EditorSystem<BaseSystem>::Init()
 	{
@@ -26,7 +30,15 @@ namespace lux
 		static bool alwaysOpen = true;
 		ImGui::Begin("Inspector", &alwaysOpen);
 
-		ImGui::Text("Fps: %.2lf", 1.0 / Timer::dt);
+		double fps = 1.0 / Timer::dt;
+		if (fps > maxFps || maxFps == INFINITY)
+			maxFps = fps;
+		if (avgFps == INFINITY)
+			avgFps = fps;
+		avgFps += fps;
+		ImGui::Text("Fps: %.2lf", fps);
+		ImGui::Text("Max Fps: %.2lf", maxFps);
+		ImGui::Text("Avg Fps: %.2lf", avgFps / (double)frameCounter);
 		ImGui::Separator();
 
 		float width = ImGui::GetWindowContentRegionMax().x - 10.0f;
@@ -49,6 +61,8 @@ namespace lux
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		++frameCounter;
 	}
 
 	template<typename BaseSystem>

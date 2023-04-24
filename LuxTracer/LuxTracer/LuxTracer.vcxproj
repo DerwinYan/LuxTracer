@@ -109,6 +109,7 @@
     <ClCompile Include="src\PathTracer.cpp" />
     <ClCompile Include="src\Pbo.cpp" />
     <ClCompile Include="src\Ray.cpp" />
+    <ClCompile Include="src\ThreadPool\RenderThreadPool.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="include\Systems\GraphicsSystem.h" />
     <ClInclude Include="include\Systems\SceneManagerSystem.h" />
     <ClInclude Include="include\Systems\System.h" />
+    <ClInclude Include="include\ThreadPool\RenderThreadPool.h" />
     <ClInclude Include="include\Timer.h" />
     <ClInclude Include="include\Window.h" />
   </ItemGroup>
