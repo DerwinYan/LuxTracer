@@ -52,9 +52,9 @@ namespace lux
 			{
 				unsigned idx = face.mIndices[ii];
 				auto const& vert = pMesh->mVertices[idx];
-				tri.vertices[ii].pos = math::dvec3{ vert.x, vert.y, vert.z } * 0.5;
+				tri.vertices[ii].pos = math::vec3{ vert.x, vert.y, vert.z } * 0.5f;
 				//auto const& norm = pMesh->mNormals[idx];
-				//tri.vertices[ii].normal = math::dvec3{ norm.x, norm.y, norm.z };
+				//tri.vertices[ii].normal = math::vec3{ norm.x, norm.y, norm.z };
 				//auto const& uv = pMesh->mTextureCoords[0][idx];
 				//tri.vertices[ii].uv = math::vec2{ uv.x, uv.y };
 			}

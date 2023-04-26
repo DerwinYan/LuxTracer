@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <string>
-#include <Math/dvec3.h>
+#include <Math/vec3.h>
 
 namespace lux
 {
@@ -13,7 +13,7 @@ namespace lux
 
 		struct Vertex
 		{
-			math::dvec3 pos{};
+			math::vec3 pos{};
 			//math::dvec3 normal{};
 			//math::dvec2 uv{};
 		};

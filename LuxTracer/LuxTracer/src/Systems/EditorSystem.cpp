@@ -1,10 +1,11 @@
 #include <Timer.h>
 #include <Scenes/Scene1.h>
+#include <Math/mathUtils.h>
 
 namespace lux
 {
-	double maxFps{};
-	double avgFps{};
+	float maxFps{};
+	float avgFps{};
 	int frameCounter{1};
 
 	template<typename BaseSystem>
@@ -30,7 +31,7 @@ namespace lux
 		static bool alwaysOpen = true;
 		ImGui::Begin("Inspector", &alwaysOpen);
 
-		double fps = 1.0 / Timer::dt;
+		float fps = 1.0f / Timer::dt;
 		if (fps > maxFps || maxFps == INFINITY)
 			maxFps = fps;
 		if (avgFps == INFINITY)
@@ -38,7 +39,7 @@ namespace lux
 		avgFps += fps;
 		ImGui::Text("Fps: %.2lf", fps);
 		ImGui::Text("Max Fps: %.2lf", maxFps);
-		ImGui::Text("Avg Fps: %.2lf", avgFps / (double)frameCounter);
+		ImGui::Text("Avg Fps: %.2lf", avgFps / (float)frameCounter);
 		ImGui::Separator();
 
 		float width = ImGui::GetWindowContentRegionMax().x - 10.0f;
@@ -49,10 +50,11 @@ namespace lux
 			ImGui::PushID((int)i);
 			GameObject& go = BaseSystem::scene[i];
 			ImGui::Text("Gameobject %d", i);
-			ImGui::InputDouble("x", &go.position.x, 0.5, 0.0, "%.3f");
-			ImGui::InputDouble("y", &go.position.y, 0.5, 0.0, "%.3f");
-			ImGui::InputDouble("z", &go.position.z, 0.5, 0.0, "%.3f");
-			ImGui::InputDouble("Radius", &go.radius, 0.1, 0.0f, "%.3f");
+			ImGui::DragFloat3("Position", go.position.data, 0.5f);
+			ImGui::DragFloat("Radius", &go.radius, 0.1f, 0.0001f, math::inf);
+			ImGui::ColorEdit3("Tint", go.mat.color.data);
+			ImGui::ColorEdit3("Emission color", go.mat.emission.data);
+			ImGui::SliderFloat("Emission strength", &go.mat.emissionStr, 0.0f, 5.0f);
 			ImGui::Separator();
 			ImGui::PopID();
 		}

@@ -4,19 +4,19 @@ namespace lux
 {
 	struct Timer
 	{
-		static void StartFrame(double time)
+		static void StartFrame(float time)
 		{
 			startTime = time;
 		}
 
-		static void EndFrame(double time)
+		static void EndFrame(float time)
 		{
 			dt = time - startTime;
 		}
 
-		inline static double dt{};
+		inline static float dt{};
 
 	private:
-		inline static double startTime{};
+		inline static float startTime{};
 	};
 }

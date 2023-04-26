@@ -3,43 +3,39 @@
 
 namespace lux
 {
-	//math::dvec3 PathTracer::GenerateRay(Ray const& ray, std::vector<GameObject> const& scene)
-	//{
-	//	
-	//}
-
-	math::dvec3 PathTracer::GenerateRay(int x, int y, int imgWidth, int imgHeight, Camera const& cam, std::vector<GameObject> const& scene)
+	math::vec3 PathTracer::GenerateRay(int x, int y, int imgWidth, int imgHeight, Camera const& cam, std::vector<GameObject> const& _scene)
 	{
-		math::dvec3 finalColor{};
+		//scene = &_scene;
+		math::vec3 finalColor{};
 
 		for (int i{}; i < spp; ++i)
 		{
-			double u = (x + math::random_double()) / (imgWidth - 1);
-			double v = (y + math::random_double()) / (imgHeight - 1);
+			float u = (x + math::random_float()) / (imgWidth - 1);
+			float v = (y + math::random_float()) / (imgHeight - 1);
 			Ray ray = cam.GetRay(u, v);
-			finalColor += TraceRay(ray, scene, 0.0, math::inf);
+			finalColor += TraceRay(ray, 0.0f, math::inf);
 		}
 
 		return finalColor * weightedSPP;
 	}
 
-	math::dvec3 PathTracer::TraceRay(
-		Ray const& ray, std::vector<GameObject> const& scene, 
-		double tMin, double tMax
+	math::vec3 PathTracer::TraceRay(
+		Ray const& ray, float tMin, float tMax
 	)
 	{
 		bool anyHit = false;
 		HitRecord finalHitInfo{};
 		HitRecord hitinfo{};
-		double closestT = tMax;
+		float closestT = tMax;
 
-		for (const auto& go : scene)
+		for (int i{}, max{(int)scene->size()}; i < max; ++i)
 		{
-			if (IntersectionSphere(ray, go, tMin, closestT, hitinfo))
+			if (IntersectionSphere(ray, (*scene)[i], tMin, closestT, hitinfo))
 			{
 				anyHit = true;
 				closestT = hitinfo.t;
 				finalHitInfo = hitinfo;
+				finalHitInfo.goIndex = i;
 			}
 		}
 
@@ -51,20 +47,20 @@ namespace lux
 
 	bool PathTracer::IntersectionSphere(
 		Ray const& ray, GameObject const& go, 
-		double tMin, double tMax, HitRecord& hitinfo
+		float tMin, float tMax, HitRecord& hitinfo
 	)
 	{
-		math::dvec3 vec = ray.position - go.position;
-		double a = math::LengthSq(ray.direction);
-		double b = math::Dot(vec, ray.direction);
-		double c = math::LengthSq(vec) - go.radius * go.radius;
-		double disc = b*b - a*c;
+		math::vec3 vec = ray.position - go.position;
+		float a = math::LengthSq(ray.direction);
+		float b = math::Dot(vec, ray.direction);
+		float c = math::LengthSq(vec) - go.radius * go.radius;
+		float disc = b*b - a*c;
 
-		if (disc < 0.0) 
+		if (disc < 0.0f) 
 			return false;
 
-		double rootdisc = sqrt(disc);
-		double root = (-b - rootdisc) / a;
+		float rootdisc = sqrt(disc);
+		float root = (-b - rootdisc) / a;
 
 		//Check both pos and neg root within t interval
 		if (root < tMin || root > tMax)
@@ -76,22 +72,24 @@ namespace lux
 
 		//Ray is within interval, calculate hitinfo
 		hitinfo.t = root;
-		hitinfo.point = ray.At(root);
-		hitinfo.normal = (hitinfo.point - go.position) / go.radius;
+		//hitinfo.point = ray.At(root);
+		//hitinfo.normal = (hitinfo.point - go.position) / go.radius;
 		return true;
 	}
 
-	math::dvec3 PathTracer::ClosestHit(HitRecord const& hitInfo)
+	math::vec3 PathTracer::ClosestHit(HitRecord const& hitInfo)
 	{
 		//Draw normals
-		return 0.5 * (hitInfo.normal + math::dvec3(1.0, 1.0, 1.0));
+		//return 0.5f * (hitInfo.normal + math::vec3(1.0f, 1.0f, 1.0f));
+
+		return scene[0][hitInfo.goIndex].mat.color;
 	}
 
-	math::dvec3 PathTracer::Miss(Ray const& ray)
+	math::vec3 PathTracer::Miss(Ray const& ray)
 	{
 		//Draw gradient skybox
-		math::dvec3 dir = math::Normalize(ray.direction);
-		double t = 0.5 * (dir.y + 1.0);
-		return math::Lerp(math::dvec3(1.0), math::dvec3(0.5, 0.7, 1.0), t);
+		math::vec3 dir = math::Normalize(ray.direction);
+		float t = 0.5f * (dir.y + 1.0f);
+		return math::Lerp(math::vec3(1.0f), math::vec3(0.5f, 0.7f, 1.0f), t);
 	}
 }

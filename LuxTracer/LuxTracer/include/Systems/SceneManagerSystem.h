@@ -7,9 +7,9 @@ namespace lux
 	template<typename BaseSystem>
 	struct SceneManagerSystem : public BaseSystem
 	{
-		static void CreateGO(math::dvec3 const& pos, double const radius)
+		static void CreateGO(math::vec3 const& pos, float const radius, Material const& mat)
 		{
-			BaseSystem::scene.emplace_back(GameObject { pos, radius });
+			BaseSystem::scene.emplace_back(GameObject{ pos, radius, mat });
 		}
 
 		//static void DestroyGO();

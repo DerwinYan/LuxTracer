@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Math/dvec3.h>
+#include <Math/vec3.h>
 
 namespace lux
 {
@@ -17,7 +17,7 @@ namespace lux
 		};
 
 		void Init(int const imgWidth, int const imgHeight);
-		void WritePixel(int x, int y, math::dvec3 const& color);
+		void WritePixel(int x, int y, math::vec3 const& color);
 		void Bind();
 		void Render();
 		void Clear(Color4 const clearColor);

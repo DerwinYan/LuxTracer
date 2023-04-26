@@ -104,7 +104,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Math\dvec3.cpp" />
+    <ClCompile Include="src\Math\vec3.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\PathTracer.cpp" />
     <ClCompile Include="src\Pbo.cpp" />
@@ -127,7 +127,7 @@
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Logger.h" />
-    <ClInclude Include="include\Math\dvec3.h" />
+    <ClInclude Include="include\Math\vec3.h" />
     <ClInclude Include="include\Math\mathUtils.h" />
     <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\PathTracer.h" />

@@ -1,17 +1,17 @@
 #pragma once
 
-#include <Math/dvec3.h>
+#include <Math/vec3.h>
 
 namespace lux
 {
 	struct Ray
 	{
 		Ray() = default;
-		Ray(math::dvec3 const& pos, math::dvec3 const& dir);
+		Ray(math::vec3 const& pos, math::vec3 const& dir);
 
-		math::dvec3 const At(double t) const noexcept;
+		math::vec3 const At(float t) const noexcept;
 
-		math::dvec3 position{};
-		math::dvec3 direction{};
+		math::vec3 position{};
+		math::vec3 direction{};
 	};
 }

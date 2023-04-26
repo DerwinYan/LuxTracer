@@ -5,18 +5,18 @@
 
 namespace lux::math
 {
-	inline constexpr double inf = std::numeric_limits<double>::infinity();
-	inline constexpr double pi = 3.141592635897932385;
+	inline constexpr float inf = std::numeric_limits<float>::infinity();
+	inline constexpr float pi = 3.141592635897932385f;
 
-	inline double random_double() 
+	inline float random_float() 
 	{
 		// Returns a random real in [0,1).
-		return rand() / (RAND_MAX + 1.0);
+		return (float)rand() / (float)(RAND_MAX + 1.0);
 	}
 
-	inline double random_double(double min, double max) 
+	inline float random_float(float min, float max) 
 	{
 		// Returns a random real in [min,max).
-		return min + (max - min) * random_double();
+		return min + (max - min) * random_float();
 	}
 }

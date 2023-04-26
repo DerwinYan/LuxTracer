@@ -1,21 +1,27 @@
 #pragma once
 
-#include <Math/dvec3.h>
+#include <Math/vec3.h>
 #include <Mesh.h>
 
 namespace lux
 {
+	struct Material
+	{
+		Material(math::vec3 const& col, math::vec3 const& emissionCol = math::vec3{}, float const emissionStrength = 0.0f)
+			: color{ col }, emission{ emissionCol }, emissionStr{ emissionStrength } {}
+
+		math::vec3 color{ 1.0f };
+		math::vec3 emission{};
+		float emissionStr{};
+	};
+
 	struct GameObject
 	{
-		GameObject(math::dvec3 const& pos, double const rad)
-			: position{ pos }, radius{ rad } {}
+		GameObject(math::vec3 const& pos, float const rad, Material const& mat)
+			: position{ pos }, radius{ rad }, mat{ mat } {}
 
-		math::dvec3 position;
-		//math::dvec3 rotation;
-		//math::dvec3 scale{ 1.0 };
-
-		double radius;
-		//Mesh* mesh;
-		//Material* material
+		math::vec3 position;
+		float radius;
+		Material mat;
 	};
 }

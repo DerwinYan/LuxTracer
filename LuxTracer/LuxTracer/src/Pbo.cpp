@@ -18,14 +18,14 @@ namespace lux
 		CreateTexture();
 	}
 
-	void Pbo::WritePixel(int x, int y, math::dvec3 const& color)
+	void Pbo::WritePixel(int x, int y, math::vec3 const& color)
 	{
 		Color4 finalColor
 		{
-			static_cast<unsigned char>(color.r * 255.999),
-			static_cast<unsigned char>(color.g * 255.999),
-			static_cast<unsigned char>(color.b * 255.999),
-			static_cast<unsigned char>(255)
+			static_cast<unsigned char>(color.r * 255.999f),
+			static_cast<unsigned char>(color.g * 255.999f),
+			static_cast<unsigned char>(color.b * 255.999f),
+			static_cast<unsigned char>(255.0f)
 		};
 		//int flippedY = imgHeight - y;
 		LogAssert(pboPtr, "PBO ptr bad!");

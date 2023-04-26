@@ -19,13 +19,13 @@ namespace lux
 	{
 		while (Window::IsOpen())
 		{
-			Timer::StartFrame(glfwGetTime());
+			Timer::StartFrame((float)glfwGetTime());
 
 			Graphics::Update();
 			Editor::Update();
 			Window::SwapBuffer();
 
-			Timer::EndFrame(glfwGetTime());
+			Timer::EndFrame((float)glfwGetTime());
 		}
 	}
 
