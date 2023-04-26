@@ -3,6 +3,6 @@ Simple path tracer that I started to try and emulate the raytracing pipeline as 
 
 ### Main features
 - [x] Multi threading
-- [ ] SIMD
+- [x] SIMD
 - [ ] Triangles
 - [ ] BVH

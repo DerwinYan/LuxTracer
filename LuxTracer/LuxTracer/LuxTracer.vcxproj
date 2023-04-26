@@ -133,7 +133,6 @@
     <ClInclude Include="include\PathTracer.h" />
     <ClInclude Include="include\pbo.h" />
     <ClInclude Include="include\Ray.h" />
-    <ClInclude Include="include\RayIntersection.h" />
     <ClInclude Include="include\Scenes\Scene1.h" />
     <ClInclude Include="include\ShaderCode\ScreenQuad.h" />
     <ClInclude Include="include\Systems\CommonSystems.h" />
