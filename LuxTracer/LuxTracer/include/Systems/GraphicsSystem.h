@@ -12,6 +12,7 @@ namespace lux
 		static void Update();
 		static void UnInit();
 
+		inline static bool shouldClear{};
 		inline static Pbo pbo;
 	};
 

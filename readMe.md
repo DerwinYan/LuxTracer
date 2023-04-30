@@ -6,3 +6,6 @@ Simple path tracer that I started to try and emulate the raytracing pipeline as 
 - [x] SIMD
 - [ ] Triangles
 - [ ] BVH
+
+![Render without skybox](/renders/noBG.png)
+![Render with skybox](/renders/yesBG.png)

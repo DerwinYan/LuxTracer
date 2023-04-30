@@ -27,11 +27,17 @@ namespace lux::screenShdr
 
 			layout (location = 0) out vec4 fFragColor;
 
-			uniform sampler2D uTexture2D;
+			uniform sampler2D uCurrTex;
+			uniform sampler2D uPrevTex;
+			uniform int uFrameNum;
 
 			void main()
 			{
-				fFragColor = vec4(texture(uTexture2D, vUV).rgb, 1.0);
+				vec4 prevCol = vec4(texture(uPrevTex, vUV).rgb, 1.0);
+				vec4 currCol = vec4(texture(uCurrTex, vUV).rgb, 1.0);
+				float weight = 1.0 / (uFrameNum + 1);
+
+				fFragColor = prevCol * (1.0-weight) + currCol * weight;
 			}
 		)"
 	};

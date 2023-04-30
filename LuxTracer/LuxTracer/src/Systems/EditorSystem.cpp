@@ -50,11 +50,16 @@ namespace lux
 			ImGui::PushID((int)i);
 			GameObject& go = BaseSystem::scene[i];
 			ImGui::Text("Gameobject %d", i);
-			ImGui::DragFloat3("Position", go.position.data, 0.01f);
-			ImGui::DragFloat("Radius", &go.radius, 0.1f, 0.0001f, math::inf);
-			ImGui::ColorEdit3("Tint", go.mat.color.data);
-			ImGui::ColorEdit3("Emission color", go.mat.emission.data);
-			ImGui::SliderFloat("Emission strength", &go.mat.emissionStr, 0.0f, 5.0f);
+			if (ImGui::DragFloat3("Position", go.position.data, 0.01f))
+				Graphics::shouldClear = true;
+			if (ImGui::DragFloat("Radius", &go.radius, 0.1f, 0.0001f, math::inf)) 
+				Graphics::shouldClear = true;
+			if (ImGui::ColorEdit3("Tint", go.mat.color.data)) 
+				Graphics::shouldClear = true;
+			if (ImGui::ColorEdit3("Emission color", go.mat.emission.data)) 
+				Graphics::shouldClear = true;
+			if (ImGui::SliderFloat("Emission strength", &go.mat.emissionStr, 0.0f, 5.0f)) 
+				Graphics::shouldClear = true;
 			ImGui::Separator();
 			ImGui::PopID();
 		}

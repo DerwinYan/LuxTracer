@@ -1,8 +1,11 @@
-#include <pbo.h>
+﻿#include <pbo.h>
 #include <GL/glew.h>
 #include <Logger.h>
 #include <ShaderCode/ScreenQuad.h>
 #include <array>
+#include <Math/mathUtils.h>
+#include <algorithm>
+#include <execution>
 
 namespace lux
 {
@@ -12,6 +15,10 @@ namespace lux
 		imgHeight = _imgHeight;
 		imgSize = imgWidth * imgHeight;
 
+		iter.resize(imgSize);
+		for (unsigned i{}; i < (unsigned)imgSize; ++i)
+			iter[i] = i;
+
 		CreateShaderPgm();
 		CreatePBO();
 		CreateScreenQuad();
@@ -20,32 +27,29 @@ namespace lux
 
 	void Pbo::WritePixel(int x, int y, math::vec3 const& color)
 	{
-		Color4 finalColor
-		{
-			static_cast<unsigned char>(color.r * 255.999f),
-			static_cast<unsigned char>(color.g * 255.999f),
-			static_cast<unsigned char>(color.b * 255.999f),
-			static_cast<unsigned char>(255.0f)
-		};
-		//int flippedY = imgHeight - y;
 		LogAssert(pboPtr, "PBO ptr bad!");
-		pboPtr[imgWidth * y + x] = finalColor;
-		//pboPtr[imgWidth * flippedY + x] = finalColor;
+		pboPtr[imgWidth * y + x] = color;
 	}
 
 	void Pbo::Bind()
 	{
-		pboPtr = static_cast<Color4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
+		pboPtr = static_cast<math::vec3*>(glMapNamedBuffer(pboBackID, GL_WRITE_ONLY));
 		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
 	}
 
 	void Pbo::Render()
 	{
-		glUnmapNamedBuffer(pboID);
+		Accumulate();
+
+		unsigned tempID = pboFrontID;
+		pboFrontID = pboBackID;
+		pboBackID = tempID;
+
+		glUnmapNamedBuffer(pboFrontID);
 		pboPtr = nullptr;
 
-		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pboID);
-		glTextureSubImage2D(texID, 0, 0, 0, imgWidth, imgHeight, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pboFrontID);
+		glTextureSubImage2D(texID, 0, 0, 0, imgWidth, imgHeight, GL_RGBA, GL_FLOAT, NULL);
 		glBindTextureUnit(0, texID);
 
 		glUseProgram(shaderPgm);
@@ -57,11 +61,18 @@ namespace lux
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 	}
 
-
-	void Pbo::Clear(Color4 const clearColor)
+	void Pbo::Clear()
 	{
-		LogAssert(pboPtr, "Invalid PBO! Make sure to bind first!");
-		std::memset(pboPtr, clearColor.raw, imgSize * 4);
+		math::vec3* tmp;
+		tmp = static_cast<math::vec3*>(glMapNamedBuffer(pboBackID, GL_WRITE_ONLY));
+		std::memset(tmp, 0, imgSize * sizeof(math::vec3));
+		glUnmapNamedBuffer(pboBackID);
+
+		tmp = static_cast<math::vec3*>(glMapNamedBuffer(pboFrontID, GL_WRITE_ONLY));
+		std::memset(tmp, 0, imgSize * sizeof(math::vec3));
+		glUnmapNamedBuffer(pboFrontID);
+
+		totalFrames = 0;
 	}
 
 	void Pbo::Resize(int const newWidth, int const newHeight)
@@ -185,20 +196,43 @@ namespace lux
 	void Pbo::CreatePBO()
 	{
 		//Calculate num pixels
-		int bytes = imgSize * sizeof(unsigned);
+		int bytes = imgSize * sizeof(math::vec3);
 
-		//Init PBO handle ID 
-		glCreateBuffers(1, &pboID);
-		glNamedBufferStorage(pboID, bytes, nullptr, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
-		pboPtr = static_cast<Color4*>(glMapNamedBuffer(pboID, GL_WRITE_ONLY));
+		//Init PBO back buffer ID 
+		glCreateBuffers(1, &pboBackID);
+		glNamedBufferStorage(pboBackID, bytes, nullptr, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
+		pboPtr = static_cast<math::vec3*>(glMapNamedBuffer(pboBackID, GL_WRITE_ONLY));
 		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
-		glUnmapNamedBuffer(pboID);
+		glUnmapNamedBuffer(pboBackID);
+
+		//Init PBO front buffer ID
+		glCreateBuffers(1, &pboFrontID);
+		glNamedBufferStorage(pboFrontID, bytes, nullptr, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT);
+		pboPtr = static_cast<math::vec3*>(glMapNamedBuffer(pboFrontID, GL_WRITE_ONLY));
+		LogAssert(pboPtr, "Unsuccessful PBO mapping!");
+		glUnmapNamedBuffer(pboFrontID);
+
 	}
 
 	void Pbo::CreateTexture()
 	{
 		//Create screen size texture
 		glCreateTextures(GL_TEXTURE_2D, 1, &texID);
-		glTextureStorage2D(texID, 1, GL_RGBA8, imgWidth, imgHeight);
+		glTextureStorage2D(texID, 1, GL_RGB32F, imgWidth, imgHeight);
+	}
+
+	void Pbo::Accumulate()
+	{
+		math::vec3*pboFrontPtr = static_cast<math::vec3*>(glMapNamedBuffer(pboFrontID, GL_WRITE_ONLY));
+		LogAssert(pboFrontPtr, "Unsuccessful PBO mapping!");
+		float weight = 1.0f / (++totalFrames);
+
+		std::for_each(std::execution::par, iter.begin(), iter.end(),
+			[=](unsigned i)
+			{
+				pboPtr[i] = pboFrontPtr[i] * (1.0f - weight) + pboPtr[i] * weight;
+			});
+
+		glUnmapNamedBuffer(pboFrontID);
 	}
 }

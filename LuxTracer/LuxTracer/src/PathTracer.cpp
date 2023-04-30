@@ -1,48 +1,75 @@
 #include <PathTracer.h>
 #include <Math/mathUtils.h>
+#include <iostream>
 
 namespace lux
 {
-	math::vec3 PathTracer::GenerateRay(int x, int y, int imgWidth, int imgHeight, Camera const& cam, std::vector<GameObject> const& _scene)
+	math::vec3 PathTracer::GenerateRay(int x, int y, int imgWidth, int imgHeight, Camera const& cam)
 	{
-		//scene = &_scene;
 		math::vec3 finalColor{};
 
-		for (int i{}; i < spp; ++i)
+		//Handle MSAA
+		for (int msaa{}; msaa < spp; ++msaa)
 		{
 			float u = (x + math::random_float()) / (imgWidth - 1);
 			float v = (y + math::random_float()) / (imgHeight - 1);
 			Ray ray = cam.GetRay(u, v);
-			finalColor += TraceRay(ray, 0.0f, math::inf);
+
+			math::vec3 thruput{ 1.0f };
+			math::vec3 ret{};
+
+			for (int bounce{}; bounce <= maxBounce; ++bounce)
+			{
+				HitRecord rayPayload{};
+				rayPayload.ray = ray;
+				TraceRay(ray, 0.0f, math::inf, rayPayload);
+
+				//Miss stop bounce
+				if (!rayPayload.hasHit)
+				{
+					ret += rayPayload.color * thruput;
+					break;
+				}
+
+				//Calculate next bounce
+				ray.position = rayPayload.point + rayPayload.normal * 0.0001f;
+				ray.direction = math::Normalize(rayPayload.normal + math::random_cos_weighted());
+				ret += rayPayload.emission * thruput;
+				thruput *= rayPayload.color;
+			}
+
+			finalColor += ret;
 		}
 
 		return finalColor * weightedSPP;
 	}
 
-	math::vec3 PathTracer::TraceRay(
-		Ray const& ray, float tMin, float tMax
-	)
+	void PathTracer::TraceRay(Ray const& ray, float tMin, float tMax, HitRecord& rayPayload)
 	{
-		bool anyHit = false;
-		HitRecord finalHitInfo{};
-		HitRecord hitinfo{};
+		bool hasHit{};
 		float closestT = tMax;
 
 		for (int i{}, max{(int)scene->size()}; i < max; ++i)
 		{
-			if (IntersectionSphere(ray, (*scene)[i], tMin, closestT, hitinfo))
+			if (IntersectionSphere(ray, (*scene)[i], tMin, closestT, rayPayload))
 			{
-				anyHit = true;
-				closestT = hitinfo.t;
-				finalHitInfo = hitinfo;
-				finalHitInfo.goIndex = i;
+				hasHit = true;
+				closestT = rayPayload.t;
+				rayPayload.goIndex = i;
 			}
 		}
 
-		if (anyHit)
-			return ClosestHit(finalHitInfo);
+		if (hasHit)
+		{
+			//Call closest hit
+			ClosestHit(rayPayload);
+		}
+
 		else
-			return Miss(ray);
+		{
+			//call miss
+			Miss(rayPayload);
+		}
 	}
 
 	bool PathTracer::IntersectionSphere(
@@ -72,24 +99,24 @@ namespace lux
 
 		//Ray is within interval, calculate hitinfo
 		hitinfo.t = root;
-		//hitinfo.point = ray.At(root);
-		//hitinfo.normal = (hitinfo.point - go.position) / go.radius;
+		hitinfo.point = ray.At(root);
+		hitinfo.normal = (hitinfo.point - go.position) / go.radius;
 		return true;
 	}
 
-	math::vec3 PathTracer::ClosestHit(HitRecord const& hitInfo)
+	void PathTracer::ClosestHit(HitRecord &hitInfo)
 	{
-		//Draw normals
-		//return 0.5f * (hitInfo.normal + math::vec3(1.0f, 1.0f, 1.0f));
-
-		return scene[0][hitInfo.goIndex].mat.color;
+		Material mat = scene[0][hitInfo.goIndex].mat;
+		hitInfo.color = mat.color;
+		hitInfo.emission = mat.emission * mat.emissionStr;
+		hitInfo.hasHit = true;
 	}
 
-	math::vec3 PathTracer::Miss(Ray const& ray)
+	void PathTracer::Miss(HitRecord &hitInfo)
 	{
 		//Draw gradient skybox
-		math::vec3 dir = math::Normalize(ray.direction);
+		math::vec3 dir = math::Normalize(hitInfo.ray.direction);
 		float t = 0.5f * (dir.y + 1.0f);
-		return math::Lerp(math::vec3(1.0f), math::vec3(0.5f, 0.7f, 1.0f), t);
+		hitInfo.color = math::Lerp(math::vec3(1.0f), math::vec3(0.5f, 0.7f, 1.0f), t);
 	}
 }

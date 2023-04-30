@@ -17,13 +17,20 @@ namespace lux
 	void GraphicsSystem<BaseSystem>::Init()
 	{
 		pbo.Init(Window::width, Window::height);
-		pt.SetSamples(4);
+		pt.SetSamples(1);
+		pt.SetBounce(8);
 		rtp.Initialize();
 	}
 
 	template<typename BaseSystem>
 	void GraphicsSystem<BaseSystem>::Update()
 	{
+		if (shouldClear)
+		{
+			pbo.Clear();
+			shouldClear = false;
+		}
+
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -31,7 +38,7 @@ namespace lux
 
 		pt.LinkScene(BaseSystem::scene);
 
-		TiledRenderData::SceneParams params(&cam, &BaseSystem::scene, &pbo, &pt);
+		TiledRenderData::SceneParams params(&cam, &pbo, &pt);
 		unsigned threadsAvail = rtp.GetNumThreads();
 
 		//Goal: Split output buffer into tiles of 64x64 bytes (16x16 pixels)

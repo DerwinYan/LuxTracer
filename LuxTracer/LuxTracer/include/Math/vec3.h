@@ -131,4 +131,9 @@ namespace lux::math
 		vec3 vector = end - start;
 		return start + vector * t;
 	}
+
+	inline vec3 const Sqrt(vec3 const& lhs)
+	{
+		return vec3(sqrtf(lhs.x), sqrtf(lhs.y), sqrtf(lhs.z));
+	}
 }

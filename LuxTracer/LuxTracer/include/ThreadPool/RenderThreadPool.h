@@ -16,7 +16,6 @@ namespace lux
 		struct SceneParams
 		{
 			Camera const* cam{};
-			std::vector<GameObject> const* scene{};
 			Pbo* pbo{};
 			PathTracer* pt{};
 		};
@@ -38,7 +37,7 @@ namespace lux
 				{
 					sceneParams.pbo->WritePixel(i, j, 
 						sceneParams.pt->GenerateRay(i, j, sceneParams.pbo->imgWidth, sceneParams.pbo->imgHeight, 
-						*sceneParams.cam, *sceneParams.scene));
+						*sceneParams.cam));
 				}
 			}
 		}
