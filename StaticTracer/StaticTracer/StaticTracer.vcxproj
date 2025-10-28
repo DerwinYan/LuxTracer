@@ -74,11 +74,15 @@
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)ExternalLibs</ExternalIncludePath>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\intermediate\$(Configuration)\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)ExternalLibs</ExternalIncludePath>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,6 +119,11 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +139,10 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,11 +152,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\FrameBuffer\FrameBuffer.cpp" />
+    <ClCompile Include="src\EngineContext.cpp" />
+    <ClCompile Include="src\GraphicsSystem.cpp" />
+    <ClCompile Include="src\PTEngine.cpp" />
+    <ClCompile Include="src\Framebuffer.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\stbLib.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\FrameBuffer\FrameBuffer.h" />
+    <ClInclude Include="include\Common.h" />
+    <ClInclude Include="include\EngineContext.h" />
+    <ClInclude Include="include\Framebuffer.h" />
+    <ClInclude Include="include\GraphicsSystem.h" />
+    <ClInclude Include="include\Graphics\Renderer.h" />
+    <ClInclude Include="include\ISystem.h" />
+    <ClInclude Include="include\PTEngine.h" />
+    <ClInclude Include="include\Renderer.h" />
+    <ClInclude Include="include\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
