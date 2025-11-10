@@ -1,9 +1,9 @@
 #ifndef GRAPHICSSYSTEM
 #define GRAPHICSSYSTEM
 
-#include <ISystem.h>
-#include <PTEngine.h>
-#include <Framebuffer.h>
+#include <Core/ISystem.h>
+#include <Core/PTEngine.h>
+#include <Graphics/Framebuffer.h>
 
 namespace pt
 {

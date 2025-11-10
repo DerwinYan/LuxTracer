@@ -1,8 +1,8 @@
 #ifndef RENDERER
 #define RENDERER
 
-#include <Window.h>
-#include <Framebuffer.h>
+#include <Core/Window.h>
+#include <Graphics/Framebuffer.h>
 
 namespace pt
 {
