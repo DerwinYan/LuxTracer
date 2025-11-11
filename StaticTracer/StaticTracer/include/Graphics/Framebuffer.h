@@ -11,7 +11,7 @@ namespace pt
   {
   public:
     Framebuffer(int width, int height);
-    void setPixel(size_t x, size_t y, Pixel const& pixel);
+    void setPixel(int x, int y, Pixel const& pixel);
     std::vector<unsigned char> const& getBuffer() const noexcept;
 
   private:

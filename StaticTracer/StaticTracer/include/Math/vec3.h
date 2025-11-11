@@ -5,16 +5,20 @@
 
 namespace math
 {
-  union vec3
+  class vec3
   {
-    float data[3];
-    struct { float x, y, z; };
-    struct { float r, g, b; };
+  public:
+    union 
+    {
+      float data[3];
+      struct { float x, y, z; };
+      struct { float r, g, b; };
+    };
 
     inline vec3() : data{ 0.0f, 0.0f, 0.0f } {}
     inline vec3(float val) : data{ val, val, val } {}
     inline vec3(float x, float y, float z) : data{ x, y, z } {}
-    inline vec3(vec3 const& rhs) : x{ rhs.x }, y{ rhs.y }, z{ rhs.z } {}
+    inline vec3(vec3 const& rhs) : data{ rhs.x, rhs.y, rhs.z } {}
     inline vec3& operator=(vec3 const& rhs)
     {
       if (this == &rhs) return *this;

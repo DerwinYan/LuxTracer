@@ -6,7 +6,7 @@ namespace pt
   class Pixel
   {
   public:
-    Pixel(unsigned char r, unsigned char g, unsigned char b) : r{ r }, g{ g }, b{ b } {}
+    Pixel(uint8_t r, uint8_t g, uint8_t b) : r{ r }, g{ g }, b{ b } {}
     Pixel(float r, float g, float b) 
       : r{ static_cast<unsigned char>(r * 255.999f) }, 
         g{ static_cast<unsigned char>(g * 255.999f) }, 
@@ -14,7 +14,7 @@ namespace pt
     {}
 
 
-    unsigned char r, g, b;
+    uint8_t r, g, b;
   };
 }
 
