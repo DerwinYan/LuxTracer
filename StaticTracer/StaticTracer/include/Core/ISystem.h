@@ -1,7 +1,7 @@
 #ifndef ISYSTEM
 #define ISYSTEM
 
-#include <EngineContext.h>
+#include <Core/EngineContext.h>
 
 namespace pt
 {

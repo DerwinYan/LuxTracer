@@ -21,22 +21,22 @@
     <ClCompile Include="src\stbLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window.cpp">
+    <ClCompile Include="src\Core\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
+    <ClCompile Include="src\Graphics\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Framebuffer.cpp">
+    <ClCompile Include="src\Graphics\Framebuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PTEngine.cpp">
+    <ClCompile Include="src\Core\PTEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GraphicsSystem.cpp">
+    <ClCompile Include="src\Graphics\GraphicsSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\EngineContext.cpp">
+    <ClCompile Include="src\Core\EngineContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,28 +44,34 @@
     <ClInclude Include="include\Graphics\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Window.h">
+    <ClInclude Include="include\Core\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Renderer.h">
+    <ClInclude Include="include\Graphics\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Framebuffer.h">
+    <ClInclude Include="include\Graphics\Framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\PTEngine.h">
+    <ClInclude Include="include\Core\PTEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ISystem.h">
+    <ClInclude Include="include\Core\ISystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GraphicsSystem.h">
+    <ClInclude Include="include\Graphics\GraphicsSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\EngineContext.h">
+    <ClInclude Include="include\Core\EngineContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

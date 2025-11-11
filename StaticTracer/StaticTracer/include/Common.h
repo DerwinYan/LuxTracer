@@ -5,7 +5,7 @@
 
 namespace pt
 {
-  using Pixel = glm::vec<3, unsigned char, glm::defaultp>;
+
 }
 
 #endif // ! COMMON

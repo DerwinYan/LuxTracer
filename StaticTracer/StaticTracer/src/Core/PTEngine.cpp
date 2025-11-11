@@ -1,5 +1,5 @@
-#include <PTEngine.h>
-#include <GraphicsSystem.h>
+#include <Core/PTEngine.h>
+#include <Graphics/GraphicsSystem.h>
 
 pt::PTEngine::PTEngine(Window const& window) : context{ window }
 {
