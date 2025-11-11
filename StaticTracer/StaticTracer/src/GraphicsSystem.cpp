@@ -1,5 +1,5 @@
-#include <Graphics/GraphicsSystem.h>
-#include <Graphics/Renderer.h>
+#include <GraphicsSystem.h>
+#include <Renderer.h>
 
 pt::GraphicsSystem::GraphicsSystem(pt::EngineContext const& context) 
   : ISystem{ context }, framebuffer{ context.window.getWidth(), context.window.getHeight() }

@@ -1,4 +1,4 @@
-#include <Graphics/Renderer.h>
+#include "Renderer.h"
 #include <stb/stb_image_write.h>
 
 pt::Renderer::Renderer(Window _window) 
@@ -13,13 +13,14 @@ void pt::Renderer::render()
     {
       auto r{ static_cast<double>(x) / (window.getWidth() - 1) };
       auto g{ static_cast<double>(y) / (window.getHeight() - 1) };
-      
-       
-      auto ir = static_cast<unsigned char>(r * 255.999);
-      auto ig = static_cast<unsigned char>(g * 255.999);
-      auto ib = static_cast<unsigned char>(0);
-      
-      framebuffer.setPixel(x, y, ir, ig, ib);
+      Pixel pixel
+      { 
+        static_cast<unsigned char>(r * 255.999),
+        static_cast<unsigned char>(g * 255.999),
+        0
+      };
+
+      framebuffer.setPixel(x, y, pixel);
     }
   }
 }

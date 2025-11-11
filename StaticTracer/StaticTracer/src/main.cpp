@@ -2,7 +2,7 @@
 #include <cassert>
 #include <memory>
 
-#include <Core/PTEngine.h>
+#include <PTEngine.h>
 
 int main()
 {

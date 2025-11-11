@@ -10,13 +10,13 @@ namespace pt
   {
   public:
     Framebuffer(int width, int height);
-    void setPixel(size_t x, size_t y, unsigned char r, unsigned char g, unsigned char b);
-    std::vector<unsigned char> const& getBuffer() const noexcept;
+    void setPixel(int x, int y, Pixel const pixel);
+    std::vector<Pixel> const& getBuffer();
 
   private:
     int width;
     int height;
-    std::vector<unsigned char> buffer;
+    std::vector<Pixel> buffer;
   };
 }
 

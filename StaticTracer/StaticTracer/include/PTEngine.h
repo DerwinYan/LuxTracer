@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include <Core/ISystem.h>
-#include <Core/Window.h>
+#include <ISystem.h>
+#include <Window.h>
 
 namespace pt
 {
