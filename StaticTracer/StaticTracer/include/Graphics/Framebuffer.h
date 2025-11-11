@@ -2,15 +2,16 @@
 #define FRAMEBUFFER
 
 #include <vector>
-#include <Common.h>
 
 namespace pt
 {
+  class Pixel;
+
   class Framebuffer
   {
   public:
     Framebuffer(int width, int height);
-    void setPixel(size_t x, size_t y, unsigned char r, unsigned char g, unsigned char b);
+    void setPixel(size_t x, size_t y, Pixel const& pixel);
     std::vector<unsigned char> const& getBuffer() const noexcept;
 
   private:

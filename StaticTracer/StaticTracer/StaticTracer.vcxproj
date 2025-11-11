@@ -18,6 +18,31 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Common.h" />
+    <ClInclude Include="include\Core\EngineContext.h" />
+    <ClInclude Include="include\Core\ISystem.h" />
+    <ClInclude Include="include\Core\PTEngine.h" />
+    <ClInclude Include="include\Core\Window.h" />
+    <ClInclude Include="include\Graphics\Framebuffer.h" />
+    <ClInclude Include="include\Graphics\GraphicsSystem.h" />
+    <ClInclude Include="include\Graphics\Pixel.h" />
+    <ClInclude Include="include\Graphics\Renderer.h" />
+    <ClInclude Include="include\Math\vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Core\EngineContext.cpp" />
+    <ClCompile Include="src\Core\PTEngine.cpp" />
+    <ClCompile Include="src\Core\Window.cpp" />
+    <ClCompile Include="src\Graphics\Framebuffer.cpp" />
+    <ClCompile Include="src\Graphics\GraphicsSystem.cpp" />
+    <ClCompile Include="src\Graphics\Renderer.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\stbLib.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="output.jpg" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -151,29 +176,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Core\EngineContext.cpp" />
-    <ClCompile Include="src\Graphics\GraphicsSystem.cpp" />
-    <ClCompile Include="src\Core\PTEngine.cpp" />
-    <ClCompile Include="src\Graphics\Framebuffer.cpp" />
-    <ClCompile Include="src\Graphics\Renderer.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\stbLib.cpp" />
-    <ClCompile Include="src\Core\Window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\Common.h" />
-    <ClInclude Include="include\Core\EngineContext.h" />
-    <ClInclude Include="include\Graphics\Framebuffer.h" />
-    <ClInclude Include="include\Graphics\GraphicsSystem.h" />
-    <ClInclude Include="include\Graphics\Color.h" />
-    <ClInclude Include="include\Graphics\Renderer.h" />
-    <ClInclude Include="include\Core\ISystem.h" />
-    <ClInclude Include="include\Math\vec3.h" />
-    <ClInclude Include="include\Core\PTEngine.h" />
-    <ClInclude Include="include\Graphics\Renderer.h" />
-    <ClInclude Include="include\Core\Window.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -47,9 +47,6 @@
     <ClInclude Include="include\Core\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Graphics\Framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
