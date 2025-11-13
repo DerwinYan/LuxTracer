@@ -65,11 +65,19 @@
     <ClInclude Include="include\Core\EngineContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Graphics\Color.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Math\vec3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Pixel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Graphics\Ray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="output.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

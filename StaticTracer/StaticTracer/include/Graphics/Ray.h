@@ -7,6 +7,7 @@ namespace pt
 {
   class Ray
   {
+  public:
     Ray(math::vec3 const& origin, math::vec3 const& direction) : origin{ origin }, direction{ direction } {}
     math::vec3 const& getOrigin() const noexcept { return origin; }
     math::vec3 const& getDirection() const noexcept { return direction; }

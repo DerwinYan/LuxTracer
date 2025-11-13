@@ -1,6 +1,7 @@
 #ifndef VEC3
 #define VEC3
 
+#include <cmath>
 #include <iostream>
 
 namespace math
@@ -45,9 +46,9 @@ namespace math
   inline vec3 operator-(vec3 const& lhs, vec3 const& rhs) noexcept { return vec3{ lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z }; }
   inline vec3 operator*(vec3 const& v, float scalar) noexcept { return vec3{ v.x * scalar, v.y * scalar, v.z * scalar }; }
   inline vec3 operator*(float scalar, vec3 const& v) noexcept { return vec3{ v.x * scalar, v.y * scalar, v.z * scalar }; }
-  inline vec3 operator/(vec3 const& v, float scalar) noexcept { return v * (1 / scalar); }
-  inline vec3 operator/(float scalar, vec3 const& v) noexcept { return v * (1 / scalar); }
-  inline vec3 normalize(vec3 const& v) noexcept { return v / length(v); }
+  inline vec3 operator/(vec3 const& v, float scalar) { return v * (1 / scalar); }
+  inline vec3 normalize(vec3 const& v) { return v / length(v); }
+  inline vec3 lerp(vec3 const& start, vec3 const& end, float t) { return start * (1.0f - t) + end * t; }
   inline float dot(vec3 const& lhs, vec3 const& rhs) noexcept { return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z; }
   inline vec3 cross(vec3 const& lhs, vec3 const& rhs) noexcept
   {
@@ -58,7 +59,7 @@ namespace math
       lhs.x * rhs.y - lhs.y * rhs.x
     };
   }
-  inline std::ostream& operator<<(std::ostream& os, vec3 const& v) { return os << v.x << ", " << v.y << ", " << v.z << '\n'; }
+  inline std::ostream& operator<<(std::ostream& os, vec3 const& v) { return os << v.x << ", " << v.y << ", " << v.z; }
 }
 
 #endif // !VEC3

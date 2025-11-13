@@ -2,23 +2,49 @@
 #include <stb/stb_image_write.h>
 #include <iostream>
 #include <Graphics/Pixel.h>
+#include <Math/vec3.h>
+#include <Graphics/Ray.h>
 
 pt::Renderer::Renderer(Window _window) 
   : window{ _window }, framebuffer{ window.getWidth(), window.getHeight() }
 {}
 
+math::vec3 skyboxColor(pt::Ray const& ray)
+{
+  static const math::vec3 skyColor{ 0.5f, 0.7f, 1.0f };
+  static const math::vec3 horizonColor{ 1.0f };
+
+  math::vec3 direction{ math::normalize(ray.getDirection()) };
+  float t{ 0.5f * (direction.y + 1.0f) };
+  return math::lerp(skyColor, horizonColor, t);
+}
+
 void pt::Renderer::render()
 {
+  float aspectRatio{ static_cast<float>(window.getWidth()) / window.getHeight() };
+  float viewportHeight{ 2.0f };
+  float viewportWidth{ viewportHeight * aspectRatio };
+  float viewportZ{ 1.0f };
+  math::vec3 cameraPosition{};
+
+  math::vec3 viewportX{ viewportWidth, 0.0f, 0.0f };
+  math::vec3 viewportY{ 0.0f, -viewportHeight, 0.0f };
+  math::vec3 pixelDeltaX{ viewportX / static_cast<float>(window.getWidth()) };
+  math::vec3 pixelDeltaY{ viewportY / static_cast<float>(window.getHeight()) };
+  math::vec3 topLeftViewport{ cameraPosition - math::vec3{0.0f, 0.0f, viewportZ} - viewportX / 2 - viewportY / 2 };
+  math::vec3 pixel00{ topLeftViewport + 0.5f * (pixelDeltaX + pixelDeltaY) };
+
   for (int y{}; y < window.getHeight(); ++y)
   {
     std::cout << "\33[2K\rScanlines remaining: " << (window.getHeight() - y) << std::flush;
 
     for (int x{}; x < window.getWidth(); ++x)
     {
-      auto r{ static_cast<float>(x) / (window.getWidth() - 1) };
-      auto g{ static_cast<float>(y) / (window.getHeight() - 1) };
+      math::vec3 pixelCenter{ pixel00 + (static_cast<float>(x) * pixelDeltaX) + (static_cast<float>(y) * pixelDeltaY) };
+      math::vec3 rayDirection{ pixelCenter - cameraPosition };
+      pt::Ray ray{ cameraPosition, rayDirection };
 
-      Pixel pixel{ r ,g, 0.0f };
+      Pixel pixel{ skyboxColor(ray) };
 
       framebuffer.setPixel(x, y, pixel);
     }
@@ -29,5 +55,6 @@ void pt::Renderer::render()
 
 void pt::Renderer::display()
 {
-  stbi_write_jpg("./output.jpg", window.getWidth(), window.getHeight(), 3, framebuffer.getBuffer().data(), 100);
+  //stbi_write_jpg("./output.jpg", window.getWidth(), window.getHeight(), 3, framebuffer.getBuffer().data(), 100);
+  stbi_write_png("./output.png", window.getWidth(), window.getHeight(), 3, framebuffer.getBuffer().data(), 3 * window.getWidth());
 }
