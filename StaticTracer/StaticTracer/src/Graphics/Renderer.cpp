@@ -5,6 +5,8 @@
 #include <Math/vec3.h>
 #include <Graphics/Ray.h>
 
+math::vec3 s_vpx;
+math::vec3 s_vpy;
 
 math::vec3 skyboxColor(pt::Ray const& ray)
 {
@@ -13,10 +15,12 @@ math::vec3 skyboxColor(pt::Ray const& ray)
 
   math::vec3 direction{ math::normalize(ray.getDirection()) };
   float t{ 0.5f * (direction.y + 1.0f) };
-  return math::lerp(skyColor, horizonColor, t);
+  return math::lerp(skyColor, horizonColor, 1.0f - t);
 }
 
-bool hitSphere(math::vec3 const& center, float radius, pt::Ray const& ray)
+/// @brief  Test ray vs sphere
+/// @return Return hit time 't' for ray
+float hitSphere(math::vec3 const& center, float radius, pt::Ray const& ray)
 {
   // Point from vector: Q + t * vector
   // Sphere formula: 
@@ -33,7 +37,10 @@ bool hitSphere(math::vec3 const& center, float radius, pt::Ray const& ray)
   float c{ math::dot(CQvec, CQvec) - radius * radius };
 
   float discriminant{ b*b - 4*a*c };
-  return discriminant >= 0.0f;
+  if (discriminant < 0.0f)
+    return FLT_MIN;
+  else
+    return (-b - std::sqrtf(discriminant)) / 2*a;
 }
 
 math::vec3 traceRay(pt::Ray const& ray)
@@ -41,14 +48,13 @@ math::vec3 traceRay(pt::Ray const& ray)
   static const math::vec3 sphereCenter{ 0,0,-1 };
   static const float radius{ 0.5 };
 
-  if (hitSphere(sphereCenter, radius, ray))
-  {
-    return { 1,0,0 };
-  }
-  else
-  {
+  float t{ hitSphere(sphereCenter, radius, ray) };
+  if (t >= 0.0f)
     return skyboxColor(ray);
-  }
+
+  math::vec3 pointOnSphere{ ray.at(t) };
+  math::vec3 normal{ pointOnSphere - sphereCenter };
+  return 0.5f * (normal + 1.0f);
 }
 
 pt::Renderer::Renderer(Window _window) 
@@ -59,16 +65,24 @@ void pt::Renderer::render()
 {
   float aspectRatio{ static_cast<float>(window.getWidth()) / window.getHeight() };
   float viewportHeight{ 2.0f };
-  float viewportWidth{ viewportHeight * aspectRatio };
+  float viewportWidth{ aspectRatio * viewportHeight };
   float viewportZ{ 1.0f };
   math::vec3 cameraPosition{};
 
-  math::vec3 viewportX{ viewportWidth, 0.0f, 0.0f };
-  math::vec3 viewportY{ 0.0f, -viewportHeight, 0.0f };
-  math::vec3 pixelDeltaX{ viewportX / static_cast<float>(window.getWidth()) };
-  math::vec3 pixelDeltaY{ viewportY / static_cast<float>(window.getHeight()) };
-  math::vec3 topLeftViewport{ cameraPosition - math::vec3{0.0f, 0.0f, viewportZ} - viewportX / 2 - viewportY / 2 };
-  math::vec3 pixel00{ topLeftViewport + 0.5f * (pixelDeltaX + pixelDeltaY) };
+  math::vec3 vpX{ viewportWidth, 0,0 }; 
+  math::vec3 vpY{ 0, viewportHeight, 0 };
+  s_vpx = vpX; s_vpy = vpY;
+  math::vec3 topLeftVP
+  {
+    cameraPosition -
+    math::vec3{0,0,viewportZ} -
+    vpX * 0.5f +
+    vpY * 0.5f
+  };
+
+  math::vec3 pixelDeltaX{ vpX / static_cast<float>(window.getWidth()) };
+  math::vec3 pixelDeltaY{ vpY / static_cast<float>(window.getHeight()) };
+  math::vec3 pixel00World{ topLeftVP + 0.5f * (pixelDeltaX + pixelDeltaY) };
 
   for (int y{}; y < window.getHeight(); ++y)
   {
@@ -76,13 +90,24 @@ void pt::Renderer::render()
 
     for (int x{}; x < window.getWidth(); ++x)
     {
-      math::vec3 pixelCenter{ pixel00 + (static_cast<float>(x) * pixelDeltaX) + (static_cast<float>(y) * pixelDeltaY) };
+      // Debug framebuffer coords
+      //Pixel pixel{ (float)x / window.getWidth(), (float)y / window.getHeight(), 0.0f};
+      //framebuffer.setPixel(x, y, pixel);
+
+      // Debug world space viewport coords
+      math::vec3 pixelCenter{ pixel00World + (static_cast<float>(x) * pixelDeltaX) - (static_cast<float>(y) * pixelDeltaY) };
       math::vec3 rayDirection{ pixelCenter - cameraPosition };
       pt::Ray ray{ cameraPosition, rayDirection };
-
-      Pixel pixel{ traceRay(ray) };
-
+      Pixel pixel{ 0.5f * (1.0f + math::normalize(ray.getDirection())) };
       framebuffer.setPixel(x, y, pixel);
+
+      //math::vec3 pixelCenter{ pixel00World + (static_cast<float>(x) * pixelDeltaX) - (static_cast<float>(y) * pixelDeltaY) };
+      //math::vec3 rayDirection{ pixelCenter - cameraPosition };
+      //pt::Ray ray{ cameraPosition, rayDirection };
+
+      //Pixel pixel{ traceRay(ray) };
+
+      //framebuffer.setPixel(x, y, pixel);
     }
   }
 

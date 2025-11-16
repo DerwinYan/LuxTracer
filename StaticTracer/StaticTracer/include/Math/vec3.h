@@ -59,7 +59,7 @@ namespace math
       lhs.x * rhs.y - lhs.y * rhs.x
     };
   }
-  inline std::ostream& operator<<(std::ostream& os, vec3 const& v) { return os << v.x << ", " << v.y << ", " << v.z; }
+  inline std::ostream& operator<<(std::ostream& os, vec3 const& v) { return os << v.x << ", " << v.y << ", " << v.z << '\n'; }
 }
 
 #endif // !VEC3
