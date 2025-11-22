@@ -4,63 +4,15 @@
 #include <Graphics/Pixel.h>
 #include <Math/vec3.h>
 #include <Graphics/Ray.h>
-
-math::vec3 skyboxColor(pt::Ray const& ray)
-{
-  static const math::vec3 skyColor{ 0.5f, 0.7f, 1.0f };
-  static const math::vec3 horizonColor{ 1.0f };
-
-  math::vec3 direction{ math::normalize(ray.getDirection()) };
-  float t{ 0.5f * (direction.y + 1.0f) };
-  return math::lerp(skyColor, horizonColor, 1.0f - t);
-}
-
-/// @brief  Test ray vs sphere
-/// @return Return hit time 't' for ray
-float hitSphere(math::vec3 const& center, float radius, pt::Ray const& ray)
-{
-  // Point from vector: Q + t * vector
-  // Sphere formula: 
-  // [C-P]*[C-P} = r^2
-  // [C- (Q+tv) ]*[C- (Q+tv) ] = r^2
-  // {t^2 * v*v} + {-2tv(C-Q)} + {(C-Q)^2 - r^2} = 0
-  //     a              b               c
-
-  math::vec3 CQvec{ center - ray.getOrigin() };
-
-  // Quadratic equation formula
-  float a{ math::dot(ray.getDirection(), ray.getDirection()) };
-  float b{ -2.0f * math::dot(ray.getDirection(), CQvec) };
-  float c{ math::dot(CQvec, CQvec) - radius * radius };
-
-  float discriminant{ b*b - 4*a*c };
-  if (discriminant < 0.0f)
-    return -FLT_MAX;
-  else
-    return (-b - std::sqrtf(discriminant)) / (2*a);
-}
-
-math::vec3 traceRay(pt::Ray const& ray)
-{
-  static const math::vec3 sphereCenter{ 0,0,-1 };
-  static const float radius{ 0.5 };
-
-  float t{ hitSphere(sphereCenter, radius, ray) };
-  if (t > 0.0) 
-  {
-    math::vec3 pointOnSphere{ ray.at(t) };
-    math::vec3 normal{ math::normalize(pointOnSphere - sphereCenter) };
-    return 0.5f * (normal + 1.0f);
-  }
-  else
-  {
-    return skyboxColor(ray);
-  }
-}
+#include <Graphics/Scene.h>
+#include <Graphics/Sphere.h>
 
 pt::Renderer::Renderer(Window _window) 
   : window{ _window }, framebuffer{ window.getWidth(), window.getHeight() }
-{}
+{
+  scene.add(std::make_shared<pt::Sphere>(math::vec3{ 0,0,-1 }, 0.5f));
+  scene.add(std::make_shared<pt::Sphere>(math::vec3{ 0,-100.5f,-1.0f }, 100.0f));
+}
 
 void pt::Renderer::render()
 {
@@ -104,7 +56,7 @@ void pt::Renderer::render()
       math::vec3 pixelCenter{ pixel00World + (static_cast<float>(x) * pixelDeltaX) - (static_cast<float>(y) * pixelDeltaY) };
       math::vec3 rayDirection{ pixelCenter - cameraPosition };
       pt::Ray ray{ cameraPosition, rayDirection };
-      Pixel pixel{ traceRay(ray) };
+      Pixel pixel{ scene.traceRay(ray) };
       framebuffer.setPixel(x, y, pixel);
     }
   }

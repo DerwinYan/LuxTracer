@@ -3,6 +3,7 @@
 
 #include <Core/Window.h>
 #include <Graphics/Framebuffer.h>
+#include <Graphics/Scene.h>
 
 namespace pt
 {
@@ -16,6 +17,7 @@ namespace pt
   private:
     Window window;
     Framebuffer framebuffer;
+    Scene scene;
   };
 }
 

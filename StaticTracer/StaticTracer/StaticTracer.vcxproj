@@ -26,12 +26,18 @@
     <ClInclude Include="include\Core\Window.h" />
     <ClInclude Include="include\Graphics\Framebuffer.h" />
     <ClInclude Include="include\Graphics\GraphicsSystem.h" />
+    <ClInclude Include="include\Graphics\HitRecord.h" />
+    <ClInclude Include="include\Graphics\IHittable.h" />
     <ClInclude Include="include\Graphics\Pixel.h" />
     <ClInclude Include="include\Graphics\Ray.h" />
     <ClInclude Include="include\Graphics\Renderer.h" />
+    <ClInclude Include="include\Graphics\Scene.h" />
+    <ClInclude Include="include\Graphics\Sphere.h" />
     <ClInclude Include="include\Math\vec3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Graphics\Scene.cpp" />
+    <ClCompile Include="src\Graphics\Sphere.cpp" />
     <ClCompile Include="src\Core\EngineContext.cpp" />
     <ClCompile Include="src\Core\PTEngine.cpp" />
     <ClCompile Include="src\Core\Window.cpp" />
